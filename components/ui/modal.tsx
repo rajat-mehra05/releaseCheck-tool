@@ -51,7 +51,7 @@ export function Modal({
     <dialog
       ref={dialogRef}
       className={cn(
-        "rounded-xl p-0 backdrop:bg-black/50",
+        "fixed inset-0 m-auto rounded-xl p-0 backdrop:bg-black/50",
         "bg-white dark:bg-neutral-900",
         "border border-gray-200 dark:border-neutral-800",
         "shadow-xl max-w-md w-full",
