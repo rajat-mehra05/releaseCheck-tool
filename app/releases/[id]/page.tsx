@@ -48,6 +48,7 @@ export default function ReleaseDetailPage() {
     trpc.releases.update.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: trpc.releases.list.queryKey() });
+        queryClient.invalidateQueries({ queryKey: trpc.releases.byId.queryKey({ id }) });
         toast("Release updated!");
         router.push("/");
       },
