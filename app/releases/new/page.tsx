@@ -23,8 +23,8 @@ export default function NewReleasePage() {
         toast("Release created successfully!");
         router.push("/");
       },
-      onError: () => {
-        toast("Failed to create release.", "error");
+      onError: (err) => {
+        toast(err.message || "Failed to create release.", "error");
       },
     })
   );

@@ -32,6 +32,16 @@ export const releasesRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      const existingReleases = await db
+        .select({ id: releases.id })
+        .from(releases)
+        .where(eq(releases.name, input.name));
+      if (existingReleases.length > 0) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `A release named "${input.name}" already exists. Please use a different version name.`,
+        });
+      }
       const [release] = await db
         .insert(releases)
         .values({
