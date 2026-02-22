@@ -1,11 +1,5 @@
-export type ReleaseStatus = "planned" | "ongoing" | "done";
+import type { InferSelectModel } from "drizzle-orm";
+import type { releases } from "@/db/schema";
 
-export interface Release {
-  id: number;
-  name: string;
-  date: string;
-  additionalInfo: string | null;
-  completedSteps: number[];
-  createdAt: string;
-  updatedAt: string;
-}
+export type Release = InferSelectModel<typeof releases>;
+export type ReleaseStatus = "planned" | "ongoing" | "done";

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { ToastProvider } from "@/components/toast";
+import { TRPCReactProvider } from "@/trpc/client";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 import "./globals.css";
 
@@ -31,9 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
+          <TRPCReactProvider>
+            <ToastProvider>
+              {children}
+            </ToastProvider>
+          </TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>

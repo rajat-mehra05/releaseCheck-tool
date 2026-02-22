@@ -19,6 +19,7 @@ export function Checkbox({ checked, onChange, label, disabled }: CheckboxProps) 
       )}
     >
       <button
+        type="button"
         role="checkbox"
         aria-checked={checked}
         disabled={disabled}

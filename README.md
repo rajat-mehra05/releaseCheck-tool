@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReleaseCheck
 
-## Getting Started
+A release checklist tool that helps developers track their release process through a 7-step workflow. Built as a single-page application with Next.js, tRPC, and PostgreSQL.
 
-First, run the development server:
+## Tech Stack
+
+- **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS v4
+- **API:** tRPC v11 (HTTP batch link)
+- **Database:** PostgreSQL (Neon) + Drizzle ORM
+- **Validation:** Zod v4
+- **Theming:** next-themes (light/dark mode)
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone and install
+git clone <repo-url>
+cd fullstack-project
+pnpm install
+
+# Database
+cp .env.example .env.local
+# Fill in your Neon DATABASE_URL in .env.local
+pnpm db:push
+
+# Run
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Database Schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sql
+CREATE TABLE releases (
+  id              SERIAL PRIMARY KEY,
+  name            TEXT NOT NULL,
+  date            TEXT NOT NULL,
+  additional_info TEXT,
+  completed_steps JSONB NOT NULL DEFAULT '[]',
+  created_at      TEXT NOT NULL,
+  updated_at      TEXT NOT NULL
+);
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Endpoints
 
-## Learn More
+All endpoints are served via tRPC at `/api/trpc`.
 
-To learn more about Next.js, take a look at the following resources:
+| Procedure            | Type     | Input                                                     | Description                   |
+|----------------------|----------|-----------------------------------------------------------|-------------------------------|
+| `releases.list`      | query    | —                                                         | List all releases (date desc) |
+| `releases.byId`      | query    | `{ id: number }`                                          | Get single release            |
+| `releases.create`    | mutation | `{ name, date, additionalInfo? }`                         | Create a new release          |
+| `releases.update`    | mutation | `{ id, name?, date?, additionalInfo?, completedSteps? }`  | Update release fields         |
+| `releases.delete`    | mutation | `{ id: number }`                                          | Delete a release              |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add `DATABASE_URL` environment variable (your Neon connection string)
+4. Deploy
 
-## Deploy on Vercel
+## Future Work (Phase 3)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Docker:** `Dockerfile` + `docker-compose.yaml` for local Postgres development
+- **Automated Tests:** Unit tests for `computeStatus` utility, integration tests for tRPC procedures
+- **Responsive polish:** Enhanced mobile experience
